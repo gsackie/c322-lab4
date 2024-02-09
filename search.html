@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+</head>
+<body>
+    <h1>Search Page</h1>
+
+    <div>
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" placeholder="Enter your search query">
+        <button onclick="search()">Search</button>
+    </div>
+
+    <div>
+       
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody id="searchResults">
+            <!-- dynamically adding search results-->
+        </tbody>
+    </table>
+
+    <script>
+        function search() {
+            let searchQuery = document.getElementById("searchQuery").value.toLowerCase(); // Get search query and convert to lowercase
+            let searchResults = document.getElementById("searchResults");
+            searchResults.innerHTML = ""; // Clear previous search results
+            
+            // Example data 
+            let data = [
+                { id: "1", type: "Duck" },
+                { id: "2", type: "Goose" },
+                { id: "3", type: "Swan" },
+                { id: "4", type: "Duck" }
+            ];
+
+            // Filter data based on search query
+            let filteredData = data.filter(item => item.id.toLowerCase().includes(searchQuery) || item.type.toLowerCase().includes(searchQuery));
+
+            // Populate table with filtered results
+            filteredData.forEach(item => {
+                let row = document.createElement("tr");
+                row.innerHTML = `<td>${item.id}</td><td>${item.type}</td>`;
+                searchResults.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>

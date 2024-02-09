@@ -12,14 +12,27 @@
     <input id="duckType" />
     <button onclick="addTheDuck()">Add the duck</button>
 
+    <!-- Image Upload Button -->
+    <input type="file" id="duckImage" accept="image/*">
+
     <script>
         function addTheDuck() {
-           let duckIdNode = document.getElementById("duckId");
-           let duckId = duckIdNode.value;
-           let duckTypeNode = document.getElementById("duckType");
-           let duckType = duckTypeNode.value;
-           let duck = {id: duckId, type: duckType}
-           alert("You entered: " + JSON.stringify(duck));
+            let duckIdNode = document.getElementById("duckId");
+            let duckId = duckIdNode.value;
+            let duckTypeNode = document.getElementById("duckType");
+            let duckType = duckTypeNode.value;
+            let duckImageNode = document.getElementById("duckImage");
+            let duckImage = duckImageNode.files[0]; // Get the first selected file
+            let duck = {id: duckId, type: duckType, image: duckImage};
+
+            // Displaying the image name and size in a popup message
+            if (duckImage) {
+                let imageName = duckImage.name;
+                let imageSize = duckImage.size;
+                alert("Image Name: " + imageName + "\nImage Size: " + imageSize + " bytes");
+            } else {
+                alert("No image selected.");
+            }
         }
     </script>
 
