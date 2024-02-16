@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Duck</title>
 </head>
 <body>
     <label>Id:</label>
@@ -16,22 +16,57 @@
     <input type="file" id="duckImage" accept="image/*">
 
     <script>
-        function addTheDuck() {
-            let duckIdNode = document.getElementById("duckId");
-            let duckId = duckIdNode.value;
-            let duckTypeNode = document.getElementById("duckType");
-            let duckType = duckTypeNode.value;
-            let duckImageNode = document.getElementById("duckImage");
-            let duckImage = duckImageNode.files[0]; // Get the first selected file
-            let duck = {id: duckId, type: duckType, image: duckImage};
+        let host = "http://localhost:8080";
 
-            // Displaying the image name and size in a popup message
-            if (duckImage) {
-                let imageName = duckImage.name;
-                let imageSize = duckImage.size;
-                alert("Image Name: " + imageName + "\nImage Size: " + imageSize + " bytes");
-            } else {
-                alert("No image selected.");
+        async function addTheDuck() {
+            let duckId = document.getElementById("duckId").value;
+            let duckType = document.getElementById("duckType").value;
+            let duckImage = document.getElementById("duckImage").files[0]; // Get the first selected file
+
+            let formData = new FormData();
+            formData.append("id", duckId);
+            formData.append("type", duckType);
+            formData.append("image", duckImage);
+
+            let request = {
+                method: "POST",
+                body: formData
+            };
+
+            try {
+                let response = await fetch(host + "/ducks", request);
+
+                if (response.ok) {
+                    // Call submitTheImage function after successfully adding the duck data
+                    await submitTheImage(); // Wait for image submission before continuing
+                    alert("The duck was added successfully!");
+                } else {
+                    console.error("HTTP error:", response.status);
+                    alert("Something went wrong! Duck data could not be saved.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong! Duck data could not be saved.");
+            }
+        }
+
+        async function submitTheImage() {
+            let duckId = document.getElementById("duckId").value;
+            let imageInput = document.getElementById("duckImage");
+            let formData = new FormData();
+            formData.append("file", imageInput.files[0]);
+
+            let request = {
+                method: "POST",
+                body: formData
+            };
+
+            try {
+                let response = await fetch(host + "/ducks/" + duckId + "/image", request);
+                let result = await response.json();
+                console.log("Image upload result:", result);
+            } catch (error) {
+                console.error("Error uploading image:", error);
             }
         }
     </script>

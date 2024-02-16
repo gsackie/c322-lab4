@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pond Page</title>
+    <style>
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            width: 20%;
+            border-radius: 5px;
+            margin: 10px;
+            float: left;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            border-radius: 5px 5px 0 0;
+            width: 100%;
+        }
+
+        .container {
+            padding: 2px 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="pondContainer">
+    <!-- dynamically adding ducks -->
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const host = "http://localhost:8080"; 
+        try {
+            let response = await fetch(host + "/ducks");
+            let ducks = await response.json();
+
+            let pondContainer = document.getElementById("pondContainer");
+
+            ducks.forEach(duck => {
+                let card = document.createElement("div");
+                card.classList.add("card");
+
+                let img = document.createElement("img");
+                img.src = `${host}/ducks/${duck.id}/image`;
+                img.alt = duck.type;
+
+                let container = document.createElement("div");
+                container.classList.add("container");
+                container.innerHTML = `<h4><b>${duck.id}</b></h4><p>${duck.type}</p>`;
+
+                card.appendChild(img);
+                card.appendChild(container);
+
+                pondContainer.appendChild(card);
+            });
+        } catch (error) {
+            console.error("Error fetching ducks:", error);
+        }
+    });
+</script>
+
+</body>
+</html>
